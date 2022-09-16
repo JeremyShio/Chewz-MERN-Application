@@ -1,0 +1,39 @@
+<%- include('../partials/header.ejs') %>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-3">
+            <div class="card mt-5">
+                <div class="card-body">
+                    <h1><%= list.title %></h1>
+                    <p class="mb-0"><%= list.description %></p>
+                </div>
+            </div>
+            <form action="/list/<%= list.slug %>/submit" method="POST">
+                <input type="hidden" name="title" value="<%= list.title %>">
+                <input type="hidden" name="listId" value="<%= list.id %>">
+                <% for (const note of list.notes) { %>
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="<%= note.id %>">
+                                    <strong><%= note.restaurant %></strong>
+                                </label>
+                                <input type="text" name="<%= note.id %>" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <button class="form-control btn btn-primary btn-block" type="submit">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<%- include('../partials/footer.ejs') %>

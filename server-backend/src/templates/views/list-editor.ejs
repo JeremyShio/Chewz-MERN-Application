@@ -1,0 +1,125 @@
+<%- include('../partials/header.ejs') %>
+
+
+<!-- Container to hold List form for user input -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-3">
+            <div class="card mt-5">
+                <div class="card-body">
+                    <h1>Create a List of Restaurants</h1>
+                </div>
+            </div>
+            <!-- Route for list creation, method is POST -->
+            <form action="/list/create" method="POST">
+                <div class="card mt-4" data-note="${i}">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="listTitle">
+                                List -- Title
+                            </label>
+                            <input type="text" name="listTitle" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="listDescription">
+                                List -- Description
+                            </label>
+                            <input type="text" name="listDescription" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+                <!-- Note form for user input (to add restaurants to list) -->
+                <div id="NoteCards">
+                </div>
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <button onclick="addNote(event)" class="form-control btn btn-success btn-block" type="button">Add New Note</button>
+                    </div>
+                </div>
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <button class="form-control btn btn-primary btn-block" type="submit">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Script for noteWrapper (User can continually add new notes, edit current notes, and delete current notes from their Restaurant List) -->
+<script>
+    const noteWrapper = document.querySelector('#noteCards');
+
+    let notes = [
+        {
+            restaurant: '',
+            person: '',
+            comment: ''
+        }];
+
+    const buildNotes = (notes, wrapper) => {
+        wrapper.innerHTML = '';
+        for (let i = 0; i < notes.length; i++){
+            wrapper.innerHTML += `
+                <div class="card mt-4" data-note="${i}">
+                    <div class="card-body">
+                        <h2 class="mb-4 text-md">Note ${i+1}</h2>
+                        <div class="form-group">
+                            <label for="noteRestaurant${i}">
+                                Note -- Restaurant
+                            </label>
+                            <input type="text" value="${notes[i].restaurant}" data-note="${i}" data-input="text" onchange="editNote(event)" name="noteRestaurant${i}" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="notePerson${i}">
+                                Note -- Person
+                            </label>
+                            <input type="text" value="${notes[i].person}" data-note="${i}" data-input="text" onchange="editNote(event)" name="notePerson${i}" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="noteComment${i}">
+                                Note -- Comment
+                            </label>
+                            <input type="text" value="${notes[i].comment}" data-note="${i}" data-input="text" onchange="editNote(event)" name="noteComment${i}" class="form-control" required>
+                        </div>
+                        <button onclick="deleteNote(event)" data-note="${i}" class="btn btn-danger" type="button">Delete Note</button>
+                    </div>
+                </div>
+            `
+        }
+    };
+
+
+    const editNote = (event) => {
+        let note = event.target.dataset.note;
+
+        notes[note][event.target.dataset.input] = event.target.value;
+
+        buildNotes(notes, noteWrapper);
+    };
+
+
+    const addNote = (event) => {
+
+        notes.push({ restaurant: '', person: '', comment: '' });
+
+        buildNotes(notes, noteWrapper);
+    };
+
+    const deleteNote = (event) => {
+        let note = event.target.dataset.note;
+
+        notes.splice(note, 1);
+
+        buildNotes(notes, noteWrapper);
+    };
+
+    buildNotes(notes, noteWrapper);
+</script>
+<!-- editNote function to handle updating current user input into notes -->
+<!-- .push to handle add element frunction to note elements to list -->
+<!-- .splice to handle remove existing note function from list-->
+
+
+<%- include('../partials/footer.ejs') %>
